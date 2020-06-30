@@ -4165,7 +4165,7 @@ tf_kernel_library(
     name = "mlir_generated_cwise_op",
     gpu_srcs = ["mlir_generated_cwise_op_gpu_tanh.cu.cc"],
     tags = ["manual"],
-    deps = if_cuda([
+    deps = if_cuda_or_rocm([
         "@com_google_absl//absl/strings",
         "@com_google_absl//absl/types:span",
         "//tensorflow/core:framework",
