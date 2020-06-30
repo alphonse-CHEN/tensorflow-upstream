@@ -820,7 +820,7 @@ StatusOr<std::vector<uint8>> CompileToHsaco(
     auto pos = str.find("\n");
     if (pos != std::string::npos) str = str.substr(pos + 1);
   }
-  str += hlo_module_config.compilation_cache_key();
+  // str += hlo_module_config.compilation_cache_key();
   {
     tensorflow::profiler::TraceMe activity(
         [&] { return absl::StrCat("Compiling IR", module->getName().str()); },
