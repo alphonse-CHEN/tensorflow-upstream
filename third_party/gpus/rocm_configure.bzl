@@ -35,7 +35,7 @@ load(
 
 _GCC_HOST_COMPILER_PATH = "GCC_HOST_COMPILER_PATH"
 _GCC_HOST_COMPILER_PREFIX = "GCC_HOST_COMPILER_PREFIX"
-_ROCM_TOOLKIT_PATH = "ROCM_TOOLKIT_PATH"
+_ROCM_TOOLKIT_PATH = "ROCM_PATH"
 _TF_ROCM_VERSION = "TF_ROCM_VERSION"
 _TF_MIOPEN_VERSION = "TF_MIOPEN_VERSION"
 _TF_ROCM_AMDGPU_TARGETS = "TF_ROCM_AMDGPU_TARGETS"
@@ -181,20 +181,28 @@ def _rocm_include_path(repository_ctx, rocm_config, bash_bin):
       host compiler include directories, which can be added to the CROSSTOOL
       file.
     """
+    rocm_toolkit_path = realpath(repository_ctx, rocm_config.rocm_toolkit_path, bash_bin)
+
     inc_dirs = []
 
     # Add HSA headers (needs to match $HSA_PATH)
-    inc_dirs.append(rocm_config.rocm_toolkit_path + "/hsa/include")
+    inc_dirs.append(rocm_toolkit_path + "/hsa/include")
 
     # Add HIP headers (needs to match $HIP_PATH)
-    inc_dirs.append(rocm_config.rocm_toolkit_path + "/hip/include")
+    inc_dirs.append(rocm_toolkit_path + "/hip/include")
 
     # Add HIP-Clang headers (realpath relative to compiler binary)
-    rocm_toolkit_path = realpath(repository_ctx, rocm_config.rocm_toolkit_path, bash_bin)
     inc_dirs.append(rocm_toolkit_path + "/llvm/lib/clang/8.0/include")
     inc_dirs.append(rocm_toolkit_path + "/llvm/lib/clang/9.0.0/include")
     inc_dirs.append(rocm_toolkit_path + "/llvm/lib/clang/10.0.0/include")
     inc_dirs.append(rocm_toolkit_path + "/llvm/lib/clang/11.0.0/include")
+
+    # Support hcc based off clang 10.0.0 (for ROCm 3.3)
+    inc_dirs.append(rocm_toolkit_path + "/hcc/compiler/lib/clang/10.0.0/include/")
+    inc_dirs.append(rocm_toolkit_path + "/hcc/lib/clang/10.0.0/include")
+
+    # Add hcc headers
+    inc_dirs.append(rocm_toolkit_path + "/hcc/include")
 
     return inc_dirs
 
