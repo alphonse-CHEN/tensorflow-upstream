@@ -44,7 +44,6 @@ bazel test \
       --local_test_jobs=${TF_GPU_COUNT} \
       --test_timeout 600,900,2400,7200 \
       --test_output=errors \
-      --test_sharding_strategy=disabled \
       --test_size_filters=small,medium \
       --run_under=//tensorflow/tools/ci_build/gpu_build:parallel_gpu_execute \
       -- \
@@ -60,7 +59,6 @@ bazel test \
       --test_output=errors \
       --jobs=${N_JOBS} \
       --local_test_jobs=1 \
-      --test_sharding_strategy=disabled \
       -- \
       //tensorflow/core/nccl:nccl_manager_test
 
